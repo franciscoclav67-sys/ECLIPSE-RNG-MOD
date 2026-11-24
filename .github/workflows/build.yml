@@ -1,1 +1,38 @@
 
+name: Build ECLIPSE RNG
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Extract mod source
+        run: |
+          unzip -o ECLIPSE_RNG_MOD_V1_SOURCE.zip -d source
+
+      - name: Build mod
+        run: |
+          cd source
+          find . -name gradlew -exec chmod +x {} \;
+          find . -name gradlew -execdir ./gradlew build \;
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: ECLIPSE-RNG-JAR
+          path: source/**/*.jar
