@@ -21,13 +21,16 @@ jobs:
           java-version: '21'
 
       - name: Extract source ZIP
-        run: |
-          unzip -o ECLIPSE_RNG_MOD_V1_SOURCE.zip -d extracted
+        run: unzip -o ECLIPSE_RNG_MOD_V1_SOURCE.zip -d extracted
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.14.3'
+
+      - name: Fix Loom configuration
+        working-directory: extracted/eclipse_mod_v1
+        run: sed -i '/^loom {/s/$/ }/' build.gradle
 
       - name: Build mod
         working-directory: extracted/eclipse_mod_v1
