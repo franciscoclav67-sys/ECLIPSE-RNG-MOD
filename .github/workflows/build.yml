@@ -30,7 +30,9 @@ jobs:
 
       - name: Fix Loom configuration
         working-directory: extracted/eclipse_mod_v1
-        run: sed -i '/^loom {/s/$/ }/' build.gradle
+        run: |
+          sed -i '/^loom {/s/$/ }/' build.gradle
+          sed -i 's/RepositoriesMode.FAIL_ON_PROJECT_REPOS/RepositoriesMode.PREFER_PROJECT/' settings.gradle
 
       - name: Build mod
         working-directory: extracted/eclipse_mod_v1
